@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: productpage-deployment
+  namespace: dev
+spec:
+  selector:
+    matchLabels:
+      app: productpage
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: productpage
+    spec:
+      imagePullSecrets:
+      - name: ocirsecret
+      containers:
+      - name: details
+        image: iad.ocir.io/idmaqhrbiuyo/product:v0.2
+        ports:
+        - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 2   
+        resources:
+          limits:
+            cpu: "1" 
+            memory: 2Gi
+          requests:
+            cpu: "1"
+            memory: "2Gi"

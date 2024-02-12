@@ -1,0 +1,23 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: details-deployment
+  namespace: dev
+spec:
+  selector:
+    matchLabels:
+      app: details
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: details
+    spec:
+      imagePullSecrets:
+      - name: ocirsecret
+      containers:
+      - name: details
+        image: iad.ocir.io/idmaqhrbiuyo/details:v0.1
+        ports:
+        - containerPort: 3001
